@@ -1,0 +1,67 @@
+# Servlet Container Server settings
+server:
+    port: 8080
+    context-path: /@{project.artifactId}/api
+    error:
+        #返回的错误消息是否包含stacktrace信息 ,never/always/on_trace_param , 开发测试环境可以打开always选项，生产环境务必使用never
+        include-stacktrace: @{stacktrace}
+    tomcat:
+        basedir: @{log.base}
+        max-threads: 500
+#监控管理路径
+management:
+    dump_requests: @{http.dump.request}
+    context-path: /@{project.artifactId}/manage
+    port: 9090
+
+endpoints:
+    shutdown.enabled: true
+
+spring:
+    # SPRING PROFILES
+    profiles:
+        active: @{profile-id}
+    # HTTP ENCODING
+    http:
+        encoding.charset: UTF-8
+        encoding.enable: true
+        encoding.force: true
+        cors.enable: true
+        #开启resttemplate
+    mvc:
+        #是否在not found 时抛出异常
+        throw-exception-if-no-handler-found: false
+#druid config
+druid:
+     url: @{druid.url}
+     username: @{druid.username}
+     password: @{druid.password}
+     filters: @{druid.filters}
+     initialSize: '20'
+     maxActive: '50'
+     minIdle: '20'
+     testWhileIdle: 'true'
+     connectionProperties: 'druid.stat.slowSqlMillis=5000'
+# MyBatis
+mybatis:
+    #mapper interface packages
+    basePackage: com.wolaidai.statistic.mapper
+    mapperLocations: classpath*:/mapper/**/*.xml
+    plugins: page
+# LOGGING
+logging:
+    level:
+       com.ibatis:DEBUG
+# Event mq
+welab:
+    event:
+      mq.uri: @{rabbitmq.uri}
+      mq.publisher.enable: false
+      mq.listener.enable: true
+      mq.listener.queue: @{project.artifactId}.queue
+
+scan.basePackages: @{scan.basePackages}
+
+dubbo:
+    protocol.port: @{dubbo.protocol.port}
+    registry.address: @{dubbo.registry.address}
